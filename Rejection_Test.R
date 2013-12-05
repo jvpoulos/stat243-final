@@ -8,13 +8,20 @@
 
 w = runif(0,1)
 rejectiontest = function(x_star,w){
-  A = w <= exp(l_k(x_star)-u_k(x_star)) | w <= exp(h(x_star)-u_k(x_star)) #logical for acceptance
-  Up = !(w <= exp(l_k(x_star)-u_k(x_star))) #logical for update
-  if Up{
+  if( w <= exp(l_k(x_star)-u_k(x_star))){
+    A = TRUE
+    Up = FALSE
+    logconcave = TRUE
+  }
+  elseif (w <= exp(h(x_star)-u_k(x_star)){ 
+    A = TRUE
+    Up = TRUE
     logconcave = l_k(x_star) <= h(x_star) & h(x_star) <= u_k(x_star)
   }
   else{
-    logconcave = TRUE
+    A = FALSE
+    Up = TRUE
+    logconcave = l_k(x_star) <= h(x_star) & h(x_star) <= u_k(x_star)
   }
   return(c(A,Up,logconcave))
 }
