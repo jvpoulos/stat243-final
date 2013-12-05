@@ -1,8 +1,6 @@
 #' @include UpperandLower.R
-#' @include evalSampPt.R
 #' @include sampleFromUp.R
-roxygen()
-
+#' 
 #' @name evalSampPt
 #' 
 #' @title Evaluate the enveloping and sandwiching functions
