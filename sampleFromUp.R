@@ -1,3 +1,6 @@
+#' @include evalSampPt.R
+#' @include evalSampPt.R
+#' 
 #' @name sampleUp 
 #' 
 #' @title This function will generate a potential sample point from
