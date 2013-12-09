@@ -7,21 +7,21 @@
 #Suppose x_star is a sample from s_k
 
 w = runif(0,1)
-rejectiontest = function(x_star,w){
-  if( w <= exp(l_k(x_star)-u_k(x_star))){
+rejectiontest = function(x_star,w, l_k, u_k, h){
+  if( w <= exp(l_k-u_k)){
     A = TRUE
     Up = FALSE
     logconcave = TRUE
   }
-  elseif (w <= exp(h(x_star)-u_k(x_star)){ 
+  else if (w <= exp(h(x_star)-u_k){ 
     A = TRUE
     Up = TRUE
-    logconcave = l_k(x_star) <= h(x_star) & h(x_star) <= u_k(x_star)
+    logconcave = l_k(x_star) <= u_k(x_star)
   }
   else{
     A = FALSE
     Up = TRUE
-    logconcave = l_k(x_star) <= h(x_star) & h(x_star) <= u_k(x_star)
+    logconcave = l_k(x_star) <= u_k(x_star)
   }
   return(c(A,Up,logconcave))
 }
