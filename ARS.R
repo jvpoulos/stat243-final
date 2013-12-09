@@ -4,7 +4,7 @@
 #' 
 #' 
 
-ARS = function(g, D, a=NA, b=NA, n=1) {
+ars = function(g, D = c(NA,NA), a=NA, b=NA, n=1) {
   
   h = function(x) log(g(x))
   samp = numeric(n)
