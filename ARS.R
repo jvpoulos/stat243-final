@@ -10,10 +10,8 @@ ars = function(g, D = c(NA,NA), a=NA, b=NA, n=1) {
   samp = numeric(n)
   #Check for valid inputs
   if (is.na(a) & is.na(b)) {
-    T_k = StartingPoints(D,h)
-  } else if (sum(is.na(c(a,b))) == 0 & diag(attr(numericDeriv(quote(h(a)),'a'))) < 0 & diag(attr(numericDeriv(quote(h(b)),'b') > 0))) {
-    T_k = c(a,b)
-  }  else {
+    T_k = startingpoints(D,h,a,b)
+  } else {
     stop("Either specify a and b, or leave both as NA")
   }
   Low = createLowHull(T_k,h,D)
@@ -27,7 +25,7 @@ ars = function(g, D = c(NA,NA), a=NA, b=NA, n=1) {
     A = testforreject[1]
     Ups = testforreject[2]
     islogconcave = testforreject[3]
-    if (islogconcave == TRUE) {
+    if (islogconcave == FALSE) {
       stop("Error: Density is not log concave")
     }
     if (A) {
