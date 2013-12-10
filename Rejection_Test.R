@@ -13,15 +13,15 @@ rejectiontest = function(x_star,w, l_k, u_k, h){
     Up = FALSE
     logconcave = TRUE
   }
-  else if (w <= exp(h(x_star)-u_k){ 
+  else if (w <= exp(h(x_star)-u_k)){ 
     A = TRUE
     Up = TRUE
-    logconcave = l_k(x_star) <= u_k(x_star)
+    logconcave = l_k <= u_k
   }
   else{
     A = FALSE
     Up = TRUE
-    logconcave = l_k(x_star) <= u_k(x_star)
+    logconcave = l_k <= u_k
   }
   return(c(A,Up,logconcave))
 }
