@@ -1,4 +1,7 @@
-
+### ARS ###
+## The purpose of this function is to perform Adaptive Rejection Sampling.
+#  Inputs:
+#     1.  'g' is a function handle of the (possibly unnormalized) density that 
 
 
 
@@ -186,10 +189,10 @@ sampleUp = function(UpperHull) {
     right = UpperHull$right[ind]
     
     x = log( u*(exp(m*right) - exp(m*left)) + exp(m*left) ) / m
-    if (!is.infinite(x) & !is.nan(x) & !is.na(x)) {
+    if (x < UpperHull$left[1] | x > UpperHull$right[length(emp.cdf)]) {
+      IsInf = TRUE
+    } else if (!is.infinite(x) & !is.nan(x) & !is.na(x))
       IsInf = FALSE
-    }
-    
     
   }
   
