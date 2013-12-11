@@ -108,8 +108,13 @@ startingpoints <- function(D,h,A,B){
     T <- c(a,b)
   }
   else {
-    a <- D[1] + sqrt(.Machine$double.eps)
-    b <- D[2] - sqrt(.Machine$double.eps)
+    if (is.numeric(A) & is.numeric(B)) {
+      a = A
+      b = B
+    } else {
+      a <- D[1] + sqrt(.Machine$double.eps)
+      b <- D[2] - sqrt(.Machine$double.eps)
+    }
     T <- c(a,b)
   }
   
@@ -155,7 +160,12 @@ createUpHull = function(T, h, D) {
   prob[is.nan(prob)] = 1
   left = c(D[1],z) # left endpoint for each line segment
   right = c(z, D[2]) # right endpoint for each line segment
-  UpBound = data.frame(cbind(m,b,prob,left,right))
+
+  if (m[1] == m[2]) {
+    UpBound = data.frame(cbind(m[1], b[1], prob[1], left[1], right[2]))
+  } else {
+    UpBound = data.frame(cbind(m,b,prob,left,right))
+  }
   colnames(UpBound) = c('m', 'b', 'prob', 'left','right')
   return(UpBound)
 }
