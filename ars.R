@@ -10,11 +10,12 @@ ars = function(g, D = c(NA,NA), a=NA, b=NA, n=1) {
   h = function(x) log(g(x))
   samp = numeric(n)
   #Check for valid inputs
-  if (is.na(a) & is.na(b)) {
-    T_k = startingpoints(D,h,a,b)
-  } else {
-    stop("Either specify a and b, or leave both as NA")
-  }
+#   if (is.na(a) & is.na(b)) {
+#     T_k = startingpoints(D,h,a,b)
+#   } else {
+#     stop("Either specify a and b, or leave both as NA")
+#   }
+  T_k = startingpoints(D,h,a,b)
   Low = createLowHull(T_k,h,D)
   Up = createUpHull(T_k,h,D)
   k = 0
@@ -46,7 +47,7 @@ ars = function(g, D = c(NA,NA), a=NA, b=NA, n=1) {
     
   }
   
-  
+  return(samp)
 }
 
 
@@ -75,6 +76,10 @@ startingpoints <- function(D,h,A,B){
     #  return(c(ap,bp)) 
     if (ap > 0 & bp < 0){  #check whether we have an optim between a and b
       T <- c(a,b)   #assign a and b as a row vector
+    } else if (ap > 0 & bp >= 0){
+      stop("No points to the right of the mode")
+    } else if (ap <= 0 & bp < 0) {
+      stop("No points to the left of the mode")
     }
     else {
       stop("Please give a valid domain for g(x)!\nPlease try again!")
@@ -97,8 +102,8 @@ startingpoints <- function(D,h,A,B){
     T <- c(a,b)
   }
   else {
-    a <- D[1]
-    b <- D[2]
+    a <- D[1] + sqrt(.Machine$double.eps)
+    b <- D[2] - sqrt(.Machine$double.eps)
     T <- c(a,b)
   }
   
