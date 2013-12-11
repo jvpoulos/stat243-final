@@ -61,7 +61,11 @@ ars = function(g, D = c(NA,NA), a=NA, b=NA, n=1) {
       }
     } else {
       T_k = sort(c(T_k,x.star))
-      Up = createUpHull(T_k,h,D)
+      Up = try(createUpHull(T_k,h,D),silent = TRUE)
+      if (is(Up,"try-error")) {
+        stop('We may have sampled a number that is too large or too small.\n Please adjust either the starting points or
+             the domain.')
+      }
       Low = createLowHull(T_k,h,D)
     }
     
@@ -255,3 +259,6 @@ rejectiontest = function(x_star,w, l_k, u_k, h){
   }
   return(c(A,Up,logconcave))
 }
+
+
+
