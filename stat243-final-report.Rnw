@@ -7,6 +7,8 @@
 
 \begin{document}
 
+\maketitle
+
 In this project, we implement the adaptive rejection sampling algorithm as described in Gilks et al. (1992) in R.  Our approach to this problem will follow the method described in section 2.2 of the paper.  Our code consists of auxiliary functions that carry out each step of the algorithm, with a main function encompassing all of these functions to carry out the simulation.  For example, our auxiliary functions involve finding a set/vector of abscissae, computing the values of $z_j$, $u_k(x)$, $s_k(x)$, and $l_k(x)$
 as described in the paper, sampling from $s_k(x)$, and performing the rejection test.  The main function will include all of these functions and a while loop to perform the rejection sampling part of the algorithm.  The inputs of the main function are the target density, the Domain on which the density is to be defined on, the number initial points, and the desired sample size.  The output is the vector of our sample as a result of the adaptive rejection sampling algorithm.\\
 
