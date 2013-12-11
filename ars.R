@@ -25,12 +25,7 @@ ars = function(g, D = c(NA,NA), a=NA, b=NA, n=1) {
   
   h = function(x) log(g(x))
   samp = numeric(n)
-  #Check for valid inputs
-#   if (is.na(a) & is.na(b)) {
-#     T_k = startingpoints(D,h,a,b)
-#   } else {
-#     stop("Either specify a and b, or leave both as NA")
-#   }
+
   T_k = startingpoints(D,h,a,b)
   if (T_k[1] < D[1] | T_k[2] > D[2]) {
     stop("At least one of the starting points is outside the domain.")
@@ -68,8 +63,6 @@ ars = function(g, D = c(NA,NA), a=NA, b=NA, n=1) {
       }
       Low = createLowHull(T_k,h,D)
     }
-    
-    
     
   }
   
@@ -141,7 +134,17 @@ startingpoints <- function(D,h,A,B){
   return(T)
 }
 
-
+## createLowHull ##
+# This function will return the necessary information to find the line segments that
+# make up the lower boundary.
+## Inputs: 'T' is the set/vector of abscissae
+##         'h' is the log of the target density
+##         'D' is the vector that specifies the domain
+## Output: a dataframe with the following information
+##         'm' is the vector of slopes of the line segments between two intersection points
+##         'b' is the vector of y-intercepts of the line segments
+##         'left' is the vector of left starting points of each line segment
+##         'right' is the vector of right ending points of each line segment
 
 createLowHull = function(T, h, D) {
   
@@ -191,7 +194,10 @@ createUpHull = function(T, h, D) {
 }
 
 
-
+## sampleUp ##
+# This function will sample a point from the upper boundary.
+## Inputs: 'UpperHull' is a dataframe containing the output of createUpHull
+## Output: a sample point candidate
 sampleUp = function(UpperHull) {
   
   emp.cdf = cumsum(UpperHull$prob)
@@ -207,8 +213,8 @@ sampleUp = function(UpperHull) {
     
     x = log( u*(exp(m*right) - exp(m*left)) + exp(m*left) ) / m
     if (x < UpperHull$left[1] | x > UpperHull$right[length(emp.cdf)]) {
-      IsInf = TRUE
-    } else if (!is.infinite(x) & !is.nan(x) & !is.na(x))
+      IsInf = TRUE #make sure the point is within the domain
+    } else if (!is.infinite(x) & !is.nan(x))
       IsInf = FALSE
     
   }
@@ -216,6 +222,14 @@ sampleUp = function(UpperHull) {
   return(x)
 }
 
+## evalSampPt
+# This function will evaluate a point on both the upper and lower boundary.
+## Inputs: 'x' is the point to be evaluated
+##         'UpHull' is the dataframe from createUpHull
+##         'LowHull' is the dataframe from createLowHull
+## Output: a vector with the following two elements
+##         'lEval' is the value of the point along the lower boundary
+##         'uEval' is the value of the point along the upper boundary
 
 
 evalSampPt = function(x, UpHull, LowHull) {
@@ -239,6 +253,19 @@ evalSampPt = function(x, UpHull, LowHull) {
   return(c(lEval, uEval))
 }
 
+## rejectiontest
+# This function will primarily determine whether to accept the sample point, and
+# if so whether we need to update the abscissae.
+## Inputs: 'x_star' the point of consideration
+##         'w' is a point from the Uniform[0,1] distribution
+##         'l_k' is the value of the point along the lower bound
+##         'u_k' is the value of the point along the upper bound
+##         'h' is the log of the target density
+## Outputs: a vector with the following elements
+##         'A' is a logical. TRUE if we accept the sample point
+##         'Up' is a logical. TRUE if we need to update the abscissae
+##         'logconcave' is a logical.  TRUE if the lower evaluatation is
+##                      smaller than the upper evaluation.
 
 
 rejectiontest = function(x_star,w, l_k, u_k, h){
