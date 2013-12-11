@@ -16,6 +16,12 @@ ars = function(g, D = c(NA,NA), a=NA, b=NA, n=1) {
 #     stop("Either specify a and b, or leave both as NA")
 #   }
   T_k = startingpoints(D,h,a,b)
+  if (T_k[1] < D[1] | T_k[2] > D[2]) {
+    stop("At least one of the starting points is outside the domain.")
+  }
+  if (g(T_k[1]) <= 0 | g(T_k[2]) <=0) {
+    stop("Invalid starting points")
+  }
   Low = createLowHull(T_k,h,D)
   Up = createUpHull(T_k,h,D)
   k = 0
