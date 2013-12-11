@@ -1,20 +1,25 @@
 #' @include evalSampPt.R
 #' @include sampleFromUp.R
+#' @include StartingPoints.R
+#' @include Rejection_Test.R
 #' 
 #' @name createLowHull
 #' 
-#' @title Code to create Upper and Lower Hulls###
+#' @title Code to create Upper and Lower Hulls
+#' 
 #' @description
 #' This function will return a dataframe with the information
 #' needed to plot the line segments.
+#' 
 #' @param T set/vector of abscissae
 #' @param h log of the target density
 #' @param D vector that specifies the domain
+#' 
 ## Output: A dataframe with the following
-#' @return m is the vector of slopes of the line segments between two abscissae
-#' @return b is the vector of y-intercepts of the line segments
-#' @return left is the vector of left starting points of each line segment
-#' @return right is the vector of right ending points of each line segment
+#' @return m vector of slopes of the line segments between two abscissae
+#' @return b vector of y-intercepts of the line segments
+#' @return left vector of left starting points of each line segment
+#' @return right vector of right ending points of each line segment
 
 createLowHull = function(T, h, D) {
   
@@ -28,19 +33,22 @@ createLowHull = function(T, h, D) {
   return(LowerBound)
 }
 
-
-## createUpHull ##
-# This function will return the necessary information to find the line segments that
-# make up the upper boundary.
-## Inputs: 'T' is the set/vector of abscissae
-##         'h' is the log of the target density
-##         'D' is the vector that specifies the domain
+#' @name createUpHull 
+#' 
+#' @description 
+#' This function will return the necessary information to find the line segments that
+#' make up the upper boundary.
+#' 
+#' @param T set/vector of abscissae
+#' @param h log of the target density
+#' @param D vector that specifies the domain
+#' 
 ## Output: a dataframe with the following information
-##         'm' is the vector of slopes of the line segments between two intersection points
-##         'b' is the vector of y-intercepts of the line segments
-##         'left' is the vector of left starting points of each line segment
-##         'right' is the vector of right ending points of each line segment
-##         'prob' is the integral of the exponential function raised to the line segment.
+#' @return m vector of slopes of the line segments between two intersection points
+#' @return b vector of y-intercepts of the line segments
+#' @return left vector of left starting points of each line segment
+#' @return right vector of right ending points of each line segment
+#' @return prob integral of the exponential function raised to the line segment.
 createUpHull = function(T, h, D) {
   
   

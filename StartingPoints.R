@@ -1,10 +1,20 @@
-### StartingPoints ###
-# This function will decide the starting points of the 
-# Adaptive Rejection Sampling function.
-## Inputs: 'D' is an interval specifying the lower and upper bounds of the target density 
-##         'h' is the log of the target density
-## Output: 'T' is a row vector of two elements
-
+#' @include evalSampPt.R
+#' @include sampleFromUp.R
+#' @include UpperandLower.R
+#' @include Rejection_Test.R
+#' 
+#' @name StartingPoints 
+#' 
+#' @title Generate starting points for Adaptive Rejection Sampling function
+#' 
+#' @description 
+#' This function will decide the starting points of the 
+#' Adaptive Rejection Sampling function.
+#' 
+#' @param D interval specifying the lower and upper bounds of the target density 
+#' @param h log of the target density
+#' 
+#' @return T row vector of two elements
 
 startingpoints <- function(D,h,A,B){
 #When the user doesn't specify the domain, the input argument could be NA's.

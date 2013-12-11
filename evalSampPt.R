@@ -1,5 +1,7 @@
-#' @include UpperandLower.R
 #' @include sampleFromUp.R
+#' @include UpperandLower.R
+#' @include StartingPoints.R
+#' @include Rejection_Test.R
 #' 
 #' @name evalSampPt
 #' 
