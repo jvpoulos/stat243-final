@@ -1,9 +1,3 @@
-#' @include evalSampPt.R
-#' @include sampleFromUp.R
-#' @include UpperandLower.R
-#' @include StartingPoints.R
-#' @include Rejection_Test.R
-#' 
 #' @name ars
 #' 
 #' @title Code to implement Adaptive Rejection Sampling (ARS) function
@@ -12,11 +6,11 @@
 #' This function will decide the starting points of the 
 #' Adaptive Rejection Sampling function.
 #' 
-#' @param g
-#' @param a
-#' @param b vector of y-intercepts of the line segments
-#' @param n
-#' @param D vector that specifies the domain
+#' @param g The density to be sampled from.
+#' @param a A (possible) starting value.
+#' @param b A (possible) starting value.
+#' @param n Number of sampled points desired.
+#' @param D A vector that specifies the domain
 #' 
 #' @return 
 
@@ -114,7 +108,11 @@ startingpoints <- function(D,h,A,B){
   }
   else if (D[2]==Inf){
     a <- D[1]
-    b <- 4
+    if (is.numeric(B)) {
+      b = B
+    } else {
+      b = 4
+    }
     if (a >= b){ #check whether the lower bound is biger than 4
       b <- 2*a   #repick b as twice of lower bound
     }
@@ -125,8 +123,8 @@ startingpoints <- function(D,h,A,B){
       a = A
       b = B
     } else {
-      a <- D[1] + sqrt(.Machine$double.eps)
-      b <- D[2] - sqrt(.Machine$double.eps)
+      a <- D[1] + 0.003
+      b <- D[2] - 0.003
     }
     T <- c(a,b)
   }

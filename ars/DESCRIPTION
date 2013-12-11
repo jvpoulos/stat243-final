@@ -7,3 +7,10 @@ Author: Who wrote it
 Maintainer: Who to complain to <yourfault@somewhere.net>
 Description: More about what it does (maybe more than one line)
 License: What license is it under?
+Collate:
+    'sampleFromUp.R'
+    'evalSampPt.R'
+    'UpperandLower.R'
+    'StartingPoints.R'
+    'Rejection_Test.R'
+    'ars.R'

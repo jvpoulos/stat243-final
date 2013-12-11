@@ -2,10 +2,10 @@
 \alias{ars}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-%%  ~~function to do ... ~~
+Adaptive Rejection Sampling
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+This function will perform adaptive rejection sampling for a (possibly unnormalized) density.
 }
 \usage{
 ars(g, D = c(NA, NA), a = NA, b = NA, n = 1)
@@ -13,19 +13,19 @@ ars(g, D = c(NA, NA), a = NA, b = NA, n = 1)
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{g}{
-%%     ~~Describe \code{g} here~~
+    A density to be sampled from.
 }
   \item{D}{
-%%     ~~Describe \code{D} here~~
+    The domain from which to sample on.
 }
   \item{a}{
-%%     ~~Describe \code{a} here~~
+    A possible abscissae.  Defaults to NA.
 }
   \item{b}{
-%%     ~~Describe \code{b} here~~
+    A possible abscissae.  Defaults to NA.
 }
   \item{n}{
-%%     ~~Describe \code{n} here~~
+    Number of desired sample points. Defaults to 1.
 }
 }
 \details{
