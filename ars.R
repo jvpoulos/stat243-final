@@ -1,9 +1,24 @@
-
-
-
-
-
-
+#' @include evalSampPt.R
+#' @include sampleFromUp.R
+#' @include UpperandLower.R
+#' @include StartingPoints.R
+#' @include Rejection_Test.R
+#' 
+#' @name ars
+#' 
+#' @title Code to implement Adaptive Rejection Sampling (ARS) function
+#' 
+#' @description
+#' This function will decide the starting points of the 
+#' Adaptive Rejection Sampling function.
+#' 
+#' @param g
+#' @param a
+#' @param b vector of y-intercepts of the line segments
+#' @param n
+#' @param D vector that specifies the domain
+#' 
+#' @return 
 
 ars = function(g, D = c(NA,NA), a=NA, b=NA, n=1) {
   
