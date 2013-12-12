@@ -55,7 +55,7 @@ BigTestFunction = function() {
   #generate 10000 random truncated beta(2,5) in [0.1,0.9]
   x <- rtrunbeta(10000,2,5,0.1,0.9) 
   #test for truncated beta(2,5) in [0.1,0.9]
-  print('Test for Beta(2,5)')
+  print('Test for Bounded Beta(2,5)')
   i = i+1
   testMain(dbetatest, D = c(0.1,0.9), a = 0.15, b = 0.85,n=10000, x,i)
   
@@ -154,7 +154,7 @@ BigTestFunction = function() {
   #generate 10000 random truncated logis(5,2) in [-5,15]
   x <- rtrunlogis(10000,5,2,-5,15) 
   #test for truncated logis(5,2) in [-5,15]
-  print('Test for bounded Logis(5,2)')
+  print('Test for Bounded Logis(5,2)')
   i = i+1
   testMain(dlogistest, D = c(-5,15), a=NA, b=NA, n=10000, x,i)
 
