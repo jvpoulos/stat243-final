@@ -16,7 +16,7 @@
 #' @return sample A vector of n elements, each element being a sample from g
 #' 
 #' @author 
-#' Steven Thomas Chang \email{stchang22@berkeley.edu}; Willy Lai \email{sv3323@berkeley.edu}; 
+#' Steven Chang \email{stchang22@berkeley.edu}; Willy Lai \email{sv3323@berkeley.edu}; 
 #' Jason Poulos \email{poulos@berkeley.edu}; Shengying Wang \email{swang10@berkeley.edu}
 #' 
 #' @references
