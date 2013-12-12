@@ -3,16 +3,30 @@
 #' @title Code to implement Adaptive Rejection Sampling (ARS) function
 #' 
 #' @description
-#' This function will decide the starting points of the 
-#' Adaptive Rejection Sampling function.
+#' This function will perform Adaptive Rejection Sampling
 #' 
-#' @param g The density to be sampled from.
-#' @param a A (possible) starting value.
-#' @param b A (possible) starting value.
-#' @param n Number of sampled points desired.
-#' @param D A vector that specifies the domain
+#' @usage ars(g, D, a = -4, b = 4, n = 1)
 #' 
-#' @return 
+#' @param g The density that we want to sample from (should be a function)
+#' @param D A vector specifying the domain on which to sample on
+#' @param a A possible starting point for the abscissae (will default to -4 if unspecified)
+#' @param b A possible starting point for the abscissae (will default to 4 if unspecified)
+#' @param n Number of sample points to generate.
+#' 
+#' @return sample A vector of n elements, each element being a sample from g
+#' 
+#' @author 
+#' Steven Thomas Chang \email{stchang22@berkeley.edu}; Willy Lai \email{sv3323@berkeley.edu}; 
+#' Jason Poulos \email{poulos@berkeley.edu}; Shengying Wang \email{swang10@berkeley.edu}
+#' 
+#' @references
+#' Gilks, W.R., P. Wild. (1992) Adaptive Rejection Sampling for Gibbs Sampling, Applied Statistics
+#' 41:337–348.
+#' 
+#' @examples
+#' g <- function(x) dnorm(x)
+#' D <- c(-Inf, Inf)
+#' ars(g, D, a = NA, b = NA, n = 10)
 
 
 ars = function(g, D = c(NA,NA), a=NA, b=NA, n=1) {
@@ -65,14 +79,11 @@ ars = function(g, D = c(NA,NA), a=NA, b=NA, n=1) {
   return(samp)
 }
 
-
-
 # This function will decide the starting points of the 
 # Adaptive Rejection Sampling function.
 ## Inputs: 'D' is an interval specifying the lower and upper bounds of the target density 
 ##         'h' is the log of the target density
 ## Output: 'T' is a row vector of two elements
-
 
 startingpoints <- function(D,h,A,B){
   #When the user doesn't specify the domain, the input argument could be NA's.
@@ -162,7 +173,6 @@ createLowHull = function(T, h, D) {
   return(LowerBound)
 }
 
-
 ## createUpHull ##
 # This function will return the necessary information to find the line segments that
 # make up the upper boundary.
@@ -175,8 +185,8 @@ createLowHull = function(T, h, D) {
 ##         'left' is the vector of left starting points of each line segment
 ##         'right' is the vector of right ending points of each line segment
 ##         'prob' is the integral of the exponential function raised to the line segment.
+
 createUpHull = function(T, h, D) {
-  
   
   x = T
   m = diag(attr(numericDeriv(quote(h(x)),'x'),'gradient')) # slopes
@@ -270,7 +280,6 @@ evalSampPt = function(x, UpHull, LowHull) {
 ##         'Up' is a logical. TRUE if we need to update the abscissae
 ##         'logconcave' is a logical.  TRUE if the lower evaluatation is
 ##                      smaller than the upper evaluation.
-
 
 rejectiontest = function(x_star,w, l_k, u_k, h){
   if( w <= exp(l_k-u_k)){
