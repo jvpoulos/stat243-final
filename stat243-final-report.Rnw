@@ -3,26 +3,38 @@
 \usepackage[paperheight=11in, paperwidth=8.5in, left=.7in, right=.7in, top=1in, bottom=1in]{geometry}
 \usepackage{amssymb,amsmath,fancyhdr,graphicx}
 \title{Stat 243 Final Project}
-\author{Willy Lai, Steven Chang, Shenying Wang, Jason Poulos}
+
+\author{Willy Lai, Steven Chang, Shengying Wang, Jason Poulos}
 
 \begin{document}
+\SweaveOpts{concordance=TRUE}
+
 
 \maketitle
-
+Chang, Steven uploaded the code file to bSpace.\\
+\newline
 In this project, we implement the adaptive rejection sampling algorithm as described in Gilks et al. (1992) in R.  Our approach to this problem will follow the method described in section 2.2 of the paper.  Our code consists of auxiliary functions that carry out each step of the algorithm, with a main function encompassing all of these functions to carry out the simulation.  For example, our auxiliary functions involve finding a set/vector of abscissae, computing the values of $z_j$, $u_k(x)$, $s_k(x)$, and $l_k(x)$
 as described in the paper, sampling from $s_k(x)$, and performing the rejection test.  The main function will include all of these functions and a while loop to perform the rejection sampling part of the algorithm.  The inputs of the main function are the target density, the Domain on which the density is to be defined on, the number initial points, and the desired sample size.  The output is the vector of our sample as a result of the adaptive rejection sampling algorithm.
 
 
 \subsection*{How we initialize the abscissae in $T_k$ (pick the values for $T_k$)}
 
-For the initialization of starting points $T_k$, we are starting out with two values because this is much easier to choose and is much more manageable in our algorithm.  In our function, startingpoints, we initialize the abscissae by taking the Domain D and assigning the first value for $T_k$ with the lower bound of D and the second value for $T_k$ with the upper bound for D.  The user has the option to input the upper and/or lower bounds or not at all.  If either the upper bound or lower bound are not given by the user, the upper bound will be $\infty$ and the lower bound will be $-\infty$.  If D has not have a lower bound, an upper bound, or both, we pick -4 and 4 as the default lower and upper bounds, respectively, and assign them as our starting points for $T_k$.  In this case, we have to check if we have an optimal value in this interval, otherwise we would not be able to perform the algorithm, stop the function, and tell the user to pick a better domain.  If D does not have a lower bound but has an upper bound, we assign -4 to lower starting point of $T_k$ and check if the lower bound is lower than -4, and if it is, we repick the lower point to be twice of the upper bound.  A similar method is performed if D does not have an upper bound but has an upper bound.  In this case, we assign 4 for the upper value for $T_k$.  Then we check if the lower bound is larger than 4, and if so, we repick the upper value as twice of the lower bound.
+For the initialization of starting points $T_k$, we are starting out with two values because this is much easier to choose and is much more manageable in our algorithm.  In our function, startingpoints, we initialize the abscissae by taking the Domain D and assigning the first value for $T_k$ with the lower bound of D and the second value for $T_k$ with the upper bound for D.  The user has the option to input the upper and/or lower bounds or not.  If either the upper bound or lower bound are not given by the user, the upper bound will be $\infty$ and the lower bound will be $-\infty$.  What the starting values are will then depend on whether the domain is bounded or unbounded on either side and if the user has provided any starting values.  If the user has provided any starting values, they will be used as our starting points for $T_k$, regardless of whether the domain is bounded or unbounded on either side.  The following discussion assumes the user has not given any starting values.\\
+
+If D has neither an upper bound nor a lower bound, we pick a = -4 and b = 4 as the default starting values.  Before we assign the starting values as our starting points for $T_k$, we check if we have an optimal value between these starting values by checking if $h'(a) > 0$ and $h'(b) < 0$.  If this is not the case, the function will stop and output an error message, which depends on which inequality was not satisfied, and tell the user the problem and what to do to avoid the error.  If a and b stastify $h'(a) > 0$ and $h'(b) < 0$, they will be assigned to $T_k$ as our starting value.\\
+
+If there is an upper bound but no lower bound, then the upper bound will be one of the starting values, with the other starting value being -4.  Before we assign the starting values, we check if the upper bound is less than -4, because this would not make sense for our starting values.  If the upper bound is less than -4, then we reassign a as twice the upper bound.  If not, then this step is unnecessary.  Either way, a and b will be our starting points for $T_k$.\\
+
+If there is a lower bound but no upper bound, a similar method is used as for the case where there is an upper bound but no lower bound.  The lower bound will be assigned to a, and b will be assigned 4.  Next, we check if the lower bound is bigger than 4, and if so we reassign b to be twice of the lower bound. If not, this step is skipped.  a and b will then be assigned as our starting points for $T_k$.\\
+
+Finally, if the Domain is bounded on both sides, the starting points will be the lower and upper bounds of the Domain.
 
 \subsection*{Testing the initialization step:}
 
 
 \subsection*{How we computed the functions $z_j, u_k(x), s_k(x), l_k(x)$}
 
-We created the functions $u_k(x)$ and $l_k(x)$ in R by having the user input the domain, the set of abscissae, and the log of the target density.  These inputs allow the user to change the these functions whenever any of the inputs change, which is especially useful when updating the abscissae is necessary.  Both functions output a data frame, in which each column represents slopes of the line segments between two abscissae, y intercepts of the line segments, left starting points of each line segment, and right starting points of each line segment.  Since $u_k(x)$ and $l_k(x)$ are piecewise linear functions, this method allows us to represent a piecewise linear function in R.  The only difference between the outputs of $u_k(x)$ and $l_k(x)$ is that the R code for $u_k(x)$ also outputs the integral of the exponential function raised to the line segment, which is essential for computing $s_k(x)$.  Also, the code for $u_k(x)$ includes the computation of the intersection points $z_j$.
+We created the functions $u_k(x)$, createUpHull, and $l_k(x)$, createLowHull, in R by having the user input the domain D, the set of starting values $T_k$, and the log of the target density $h(x)$.  These inputs allow the user to change these functions whenever any of the inputs change, which is especially useful when updating the $T_k$ is necessary.  Both functions output a data frame, in which each column represents slopes of the line segments between two abscissae, y intercepts of the line segments, left starting points of each line segment, and right starting points of each line segment.  Since $u_k(x)$ and $l_k(x)$ are piecewise linear functions, this method allows us to represent a piecewise linear function in R.  The only difference between the outputs of $u_k(x)$ and $l_k(x)$ is that the R code for $u_k(x)$ also outputs the integral of the exponential function raised to the line segment, which is essential for computing $s_k(x)$.  Also, the code for $u_k(x)$ includes the computation of the intersection points $z_j$.  Computation for $s_k(x)$ is included in the function for sampling from $s_k(x)$.
 
 \subsection*{Testing these functions:}
 
@@ -36,23 +48,33 @@ We sampled a point from $s_k(x)$ by creating the inverse cdf of $s_k(x)$ and sam
 
 \subsection*{How we performed the rejection test:}
 
-After sampling a point from $s_k(x)$, we evaluate the upper boundary and lower boundary at this sample point.  The function to perform this, evalSampPt, will involve taking  the data frame for the upper boundary and lower boundary and the sample point as inputs, and returning a vector of the $u_k(x)$ and $l_k(x)$ evaluated at the sample point.  Afterwards, we take these to points to perform the squeeze test and the rejection test of our sampling test.  Our function, RejectionTest, will take the values evaluated at evalSampPt as well as the sample point and return three logicals, which describe whether we accept or reject the sample point, whether we update our abscissae or not, and whether our target density is log-concave at our sample.  These logicals will decide how we proceed with our algorithm.  Most importantly, if our target density is not log-concave at the sample point, then the entire function stops and gives an error message telling the user that the density was not log-concave.  This step ensures that our assumption of log-concavity is satisfied.
-
+After sampling a point from $s_k(x)$, we evaluate the upper boundary and lower boundary at this sample point.  The function to perform this, evalSampPt, will involve taking  the data frame for the upper boundary and lower boundary and the sample point as inputs, and returning a vector of the $u_k(x)$ and $l_k(x)$ evaluated at the sample point.  Afterwards, we take these to points to perform the squeeze test and the rejection test of our sampling test.  Our function, rejectiontest, will take the values evaluated at evalSampPt as well as the sample point and return three logicals, which describe whether we accept or reject the sample point, whether we update our abscissae or not, and whether our target density is log-concave at our sample.  These logicals will decide how we proceed with our algorithm.  
 
 \subsection*{Testing the rejection test}
 
 
 
-
-\subsection*{How we updated the values when necessary.}
-
-\subsection*{Test the update steps.}
-
-
-
 \subsection*{How we wrote the whole algorithm into a main function:}
+After writing all of the above auxiliary functions and steps, we put them together into a main function called ars.  The inputs for ars are the target density g, the domain D with default argument to be a vector of 2 NA's, the two possible starting values a and b, both of which has their default arguments as NA, and the desired sample size n.  The functions starts by defining $h(x)$ by taking the log of the target density and creating an empty numeric vector to be filled with sample points from our algorithm.  Next, we build our vector of starting points $T_k$ and data frames representing the functions $u_k(x)$ and $l_k(x)$.  The function stops if the starting points $T_k$ are either invalid or is outside of the domain.  \\
+
+After creating the starting values and functions, we run a while loop to generate our sample.  We created a counter, k, that counts the number of elements in our sample, in which the while loop will run until we have the desired number of elements in our sample. Note that k will only increment by 1 if we accept the sample point.  In the while loop, we sample $x^*$ from $s_k(x)$, sample u from a uniform(0,1) distribution, evaluate the sample point $x^*$, and test to see if we should accept or reject the sample point, if we need to update the starting values $T_k$, and if our target density is log-concave.  If our target density is not log-concave at the sample point, then the entire function stops and gives an error message telling the user that the density was not log-concave.  This step ensures that our assumption of log-concavity is satisfied.\\
+
+If log-concavity is satisfied, we use the logicals for acceptance and update to proceed with our algorithm.  We check whether we accept the sample or not before checking if we need to update the vector of initial values, $T_k$.  If acceptance is true, we add our sample, called x.star, to the current vector of samples. Then, if update is true, we place in the sample, x.star, into our vector $T-k$ and sort them in increasing order. If we do not accept the sample, then we update by placing x.star in $T_k$, since this is part of the algorithm.  We also update the functions $u_k(x)$ and $l_(k)$ by using the updated $T_k$.  In the process, we check if the updated $u_k(x)$ will give us an error, and if so, the function will stop and print an error message.  This step checks if we sampled anything that is too small or too large and if the starting values or domain is valid for our algorithm.  Afterwards, the algorithm repeats, with updated values if an update was performed, until we have the desired number of sample points.\\
+
+The function, ars, outputs a vector of n sample points once the sampling algorithm has been completed.  This sample should be representative of the target density $g(x)$.  
+
+
 \subsection*{Test the Main function performing our rejection sampling algorithm.}
 
+\subsection*{Team Roles}
+Everybody dabbled in every aspect of the project.  \\
 
+Steven - Steven primarily organized and wrote the main function along with the functions that created the upper hull, lower hull, and sampled from the upper hull.  Along with Shengying, he tested the main function along with all the auxiliary functions.  \\
+
+Shengying - Shengying primarily tested all the code that Steven wrote while helping Steven organize the logical flow.  He also collaborated with Willy and Jason in writing the function that determines the starting points.\\
+
+Willy - Willy wrote the function that performs the rejection and updating tests in addition to collaborating with Shengying and Jason on writing the function that determines the starting values.  He was the primary organizer and writer of the written report.\\
+
+Jason - Jason collaborated with Willy and Shengying in writing the function that determines the starting points.  He was the primary organizer and creator of the help documentation.
 
 \end{document}
