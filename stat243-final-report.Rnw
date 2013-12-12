@@ -69,6 +69,6 @@ Shengying - Shengying primarily tested all the code that Steven wrote while help
 
 Willy - Willy wrote the function that performs the rejection and updating tests in addition to collaborating with Shengying and Jason on writing the function that determines the starting values.  He was the primary organizer and writer of the written report.\\
 
-Jason - Jason collaborated with Willy and Shengying in writing the function that determines the starting points.  He was the primary organizer and creator of the help documentation.
+Jason - Jason collaborated with Willy and Shengying in writing the function that determines the starting points.  He was the primary organizer and writer of the help comments.
 
 \end{document}
