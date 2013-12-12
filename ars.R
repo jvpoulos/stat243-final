@@ -19,7 +19,9 @@ ars = function(g, D = c(NA,NA), a=NA, b=NA, n=1) {
   
   h = function(x) log(g(x))
   samp = numeric(n)
-
+  if ((is.na(a) + is.na(b)) == 1) {
+    stop('Please either specify both a and b, or do not specify both')
+  }
   T_k = startingpoints(D,h,a,b)
   if (T_k[1] < D[1] | T_k[2] > D[2]) {
     stop("At least one of the starting points is outside the domain.")
@@ -107,7 +109,11 @@ startingpoints <- function(D,h,A,B){
     T <- c(a,b)
   }
   else if (D[2]==Inf){
-    a <- D[1]
+    if (is.numeric(A)) {
+      a <- A
+    } else {
+      a <- D[1]
+    }
     if (is.numeric(B)) {
       b = B
     } else {
