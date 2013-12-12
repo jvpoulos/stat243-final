@@ -28,7 +28,6 @@
 #' D <- c(-Inf, Inf)
 #' ars(g, D, a = NA, b = NA, n = 10)
 
-
 ars = function(g, D = c(NA,NA), a=NA, b=NA, n=1) {
   
   h = function(x) log(g(x))
@@ -79,6 +78,7 @@ ars = function(g, D = c(NA,NA), a=NA, b=NA, n=1) {
   return(samp)
 }
 
+## startingpoints ##
 # This function will decide the starting points of the 
 # Adaptive Rejection Sampling function.
 ## Inputs: 'D' is an interval specifying the lower and upper bounds of the target density 
