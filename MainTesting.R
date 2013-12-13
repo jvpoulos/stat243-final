@@ -11,7 +11,7 @@
 # If the p-value is bigger than 5%, we pass.
 
 #define the testing function
-BigTestFunction = function() {
+test = function() {
   set.seed(0)
   par(mfrow=c(2,3))
   titlebank = c("Standard Normal", 'Bounded Beta(2,5)', 'Exponential(1.5)', 'Bounded Gamma(2,2)', 'Bounded Weibull(1.5,1)', 'Bounded Logis(5,2)')
